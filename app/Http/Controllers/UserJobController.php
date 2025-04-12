@@ -30,7 +30,7 @@ class UserJobController extends Controller
     }
 
     public function store(Request $request)
-{
+    {
     $rules = [
         'username' => 'required',
         'password' => 'required',
@@ -43,37 +43,31 @@ class UserJobController extends Controller
     $userjob = UserJob::create($request->all());
 
     return $this->successResponse($userjob, 201);
-}
+    }
 
 
-     // Update user
-     public function update(Request $request, $id)
-     {
-         $rules = [
-             'username' => 'max:20',
-             'password' => 'max:20',
-             'gender'   => 'in:Male,Female',
-             'jobid'    => 'required|numeric|min:1|not_in:0',
-         ];
- 
-         $this->validate($request, $rules);
- 
-         // Validate jobid exists
-         $jobExists = UserJob::find($request->jobid);
-         if (!$jobExists) {
-             return $this->errorResponse('The provided jobid does not exist.', Response::HTTP_NOT_FOUND);
-         }
- 
-         $user = User::findOrFail($id);
-         $user->fill($request->all());
- 
-         if ($user->isClean()) {
-             return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
-         }
- 
-         $user->save();
-         return $this->successResponse($user);
-     }
+    // Update a UserJob
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'jobname'  => 'max:100',
+            'username' => 'max:50',
+            'password' => 'max:50',
+            'gender'   => 'in:Male,Female',
+        ];
+
+        $this->validate($request, $rules);
+
+        $userjob = UserJob::findOrFail($id);
+        $userjob->fill($request->all());
+
+        if ($userjob->isClean()) {
+            return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $userjob->save();
+        return $this->successResponse($userjob);
+    }
 
     /**
      * Get one user job by ID
@@ -84,5 +78,13 @@ class UserJobController extends Controller
     {
         $userjob = UserJob::findOrFail($id);
         return $this->successResponse($userjob);
+    }
+
+    public function destroy($id)
+    {
+        $userjob = UserJob::findOrFail($id);
+        $userjob->delete();
+
+        return $this->successResponse("UserJob with ID $id has been deleted.");
     }
 }

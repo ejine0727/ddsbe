@@ -16,5 +16,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/usersjob','UserJobController@index');
     $router->get('/userjob/{id}','UserJobController@show'); // get user by id
     $router->post('/usersjob', 'UserJobController@store');
-    
+    $router->put('/usersjob/{id}', 'UserJobController@update');     // Full update
+    $router->patch('/usersjob/{id}', 'UserJobController@update');   // Partial update
+    $router->delete('/usersjob/{id}', 'UserJobController@destroy'); // Delete
+
 });
