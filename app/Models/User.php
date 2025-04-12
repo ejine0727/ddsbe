@@ -20,7 +20,8 @@ class User extends Model
         'username',
         'password',
         'email',
-        'gender'
+        'gender',
+        'jobid'
     ];
 
     // ✅ Hide password when returning data
@@ -30,4 +31,10 @@ class User extends Model
 
     // ✅ Disable timestamps if your table has no `created_at` and `updated_at`
     public $timestamps = false;
+
+    public function job()
+{
+    return $this->belongsTo(UserJob::class, 'jobid');
+}
+
 }

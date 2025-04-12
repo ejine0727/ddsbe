@@ -6,6 +6,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Http\Response;
+use App\Models\UserJob; 
 
 class UserController extends Controller
 {
@@ -13,8 +14,8 @@ class UserController extends Controller
 
     public function index   ()
     {
-        $users = User::all();
-        return response()->json($users, Response::HTTP_OK);
+        $userjobs = UserJob::all();
+        return response()->json($userjobs, Response::HTTP_OK);
     }
 
     public function store(Request $request)
@@ -23,9 +24,12 @@ class UserController extends Controller
             'username' => 'required|max:20',
             'password' => 'required|max:20',
             'gender' => 'required|in:Male,Female',
+            'jobid' => 'required|numeric|min:1|not_in:0',
         ];
 
         $this->validate($request, $rules);
+
+        $userjob =UserJob::findOrFail($request->jobid);
         $user = User::create($request->all());
 
         return response()->json($user, Response::HTTP_CREATED);
